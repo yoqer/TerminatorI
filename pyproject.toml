@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "terminatori"
+version = "1.0.0"
+description = "Advanced AI Inference System with Avatars, Video, Robotics and Skills"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "yoqer", email = "yoqer@github.com" }]
+keywords = [
+    "AI", "LLM", "inference", "avatar", "robotics", "video", "TTS",
+    "Ollama", "llama.cpp", "Runway", "ElevenLabs", "Kokoro", "MCP",
+    "skills", "Aureolas", "TenMiNaTor", "TerminaTodo"
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Software Development :: Libraries :: Python Modules",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.115.0",
+    "uvicorn[standard]>=0.32.0",
+    "pydantic>=2.9.0",
+    "pydantic-settings>=2.6.0",
+    "httpx>=0.28.0",
+    "aiofiles>=24.1.0",
+    "python-multipart>=0.0.12",
+    "python-jose[cryptography]>=3.3.0",
+    "passlib[bcrypt]>=1.7.4",
+    "python-dotenv>=1.0.1",
+    "openai>=1.58.0",
+    "rich>=13.9.0",
+    "typer>=0.15.0",
+    "pyyaml>=6.0.2",
+    "requests>=2.32.3",
+    "websockets>=14.1",
+    "gtts>=2.5.3",
+]
+
+[project.optional-dependencies]
+voice = [
+    "kokoro-onnx>=0.4.0",
+    "openai-whisper>=20240930",
+    "soundfile>=0.12.1",
+]
+local-llm = [
+    "llama-cpp-python>=0.3.0",
+    "torch>=2.5.0",
+    "transformers>=4.47.0",
+]
+robotics = [
+    "pyserial>=3.5",
+]
+full = [
+    "terminatori[voice,local-llm,robotics]",
+    "Pillow>=11.0.0",
+    "anthropic>=0.40.0",
+]
+
+[project.urls]
+Homepage = "https://github.com/yoqer/TERMINATORI"
+Repository = "https://github.com/yoqer/TERMINATORI"
+"Bug Tracker" = "https://github.com/yoqer/TERMINATORI/issues"
+Documentation = "https://github.com/yoqer/TERMINATORI/wiki"
+
+[project.scripts]
+terminatori = "terminatori.cli:app"
+terminatori-server = "terminatori.api.app:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["terminatori*"]
+exclude = ["tests*", "docs*", "panel*"]
+
+[tool.setuptools.package-data]
+terminatori = ["*.yaml", "*.json", "*.md"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+asyncio_mode = "auto"
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"

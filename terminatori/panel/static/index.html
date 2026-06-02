@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>AppTerminatorI</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 0; background: #0b1020; color: #eef2ff; }
+    .wrap { max-width: 900px; margin: 0 auto; padding: 48px 24px; }
+    .card { background: #141b34; border: 1px solid #2b375f; border-radius: 16px; padding: 24px; margin-bottom: 20px; }
+    a { color: #8ab4ff; }
+    code { background: #0f1730; padding: 2px 6px; border-radius: 6px; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <h1>AppTerminatorI</h1>
+      <p>Paquete listo para uso local y despliegue web estándar.</p>
+      <p>Documentación API: <a href="/docs">/docs</a></p>
+      <p>Estado: <a href="/health">/health</a></p>
+    </div>
+    <div class="card">
+      <h2>Inicio rápido</h2>
+      <p>Instala dependencias y arranca el servidor:</p>
+      <pre><code>pip install -r requirements.txt
+uvicorn terminatori.api.app:app --host 0.0.0.0 --port 8000</code></pre>
+    </div>
+  </div>
+</body>
+</html>
