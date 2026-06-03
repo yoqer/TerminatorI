@@ -1,130 +1,179 @@
-# TERMINATOR I
+# AppTerminatorI · Rama `local`
 
-**Advanced AI Inference System** — Sistema de inferencia extensible con soporte para avatares 3D, generación de vídeo en tiempo real, robótica, síntesis de voz y sistema de skills/Aureolas.
+**AppTerminatorI** en la rama **`local`** es una variante preparada para **uso local**, **pruebas funcionales** y **despliegue en hosting web estándar** mediante un servidor **FastAPI/ASGI**. Esta rama sustituye el contenedor original empaquetado en RAR por una estructura Python utilizable directamente, con scripts de arranque, configuración base y una interfaz web mínima para comprobación rápida del servicio.
 
-[![Python 3.10+](https://img.shields.io/badge/python-3.10+-blue.svg)](https://python.org)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![PyPI](https://img.shields.io/badge/PyPI-terminatori-purple.svg)](https://pypi.org/project/terminatori/)
+## Propósito de esta rama
 
----
+Esta rama está orientada a un escenario práctico de ejecución. El proyecto queda listo para levantarse en un equipo local, un VPS, un contenedor Docker o una plataforma compatible con aplicaciones Python que expongan un proceso web. Además, incluye respuestas de respaldo locales para que el sistema pueda arrancar incluso sin un proveedor externo configurado, lo que facilita validación técnica, integración inicial y desarrollo incremental.
 
-## Inicio Rápido
+| Elemento | Estado en la rama `local` | Observación |
+|---|---|---|
+| API HTTP | Disponible | Basada en FastAPI |
+| Panel web mínimo | Disponible | Servido desde `/panel` |
+| Documentación OpenAPI | Disponible | Visible en `/docs` |
+| Arranque local | Disponible | Mediante `start_local.sh` |
+| Arranque para servidor | Disponible | Mediante `start_production.sh` |
+| Despliegue con Docker | Disponible | Incluye `Dockerfile` |
+| Despliegue tipo PaaS | Disponible | Incluye `Procfile` |
+| Variables de entorno base | Disponible | Incluye `.env.example` |
+| Respuesta fallback local | Disponible | Permite pruebas sin proveedor real |
+
+## Estructura principal del proyecto
+
+El repositorio en esta rama se organiza alrededor del paquete `terminatori`, que concentra la API, el motor principal, módulos auxiliares y capacidades complementarias. También se incluyen archivos de despliegue y pruebas básicas para verificar el funcionamiento general.
+
+| Ruta | Función |
+|---|---|
+| `terminatori/api/app.py` | Servidor FastAPI y punto de entrada ASGI |
+| `terminatori/core/engine.py` | Motor principal de inferencia y sesiones |
+| `terminatori/core/config.py` | Configuración por entorno |
+| `terminatori/core/backends.py` | Backends mínimos y fallback local |
+| `terminatori/voice/` | Gestión de TTS y STT |
+| `terminatori/avatar/` | Gestión base de avatar |
+| `terminatori/video/` | Gestión base de vídeo |
+| `terminatori/robotics/` | Gestión base de robótica simulada |
+| `terminatori/skills/` | Skills/Aureolas incluidas |
+| `terminatori/memory/` | Persistencia ligera en SQLite |
+| `terminatori/panel/static/` | Panel HTML mínimo |
+| `tests/` | Pruebas existentes del proyecto |
+| `DEPLOY_AND_LOCAL_USAGE.md` | Guía breve de despliegue |
+
+## Inicio rápido en local
+
+La forma más simple de usar esta rama consiste en crear el entorno virtual, instalar dependencias y arrancar el servidor en modo desarrollo. Para ello, basta con ejecutar el script incluido.
 
 ```bash
-# Clonar
-git clone https://github.com/yoqer/TERMINATORI.git
-cd TERMINATORI
-
-# Configurar
+git clone -b local https://github.com/yoqer/TerminatorI.git
+cd TerminatorI
 cp .env.example .env
-# Editar .env con tus API keys
-
-# Iniciar (local)
-chmod +x start.sh && ./start.sh
-
-# O con Docker
-./start.sh docker
+chmod +x start_local.sh
+./start_local.sh
 ```
 
-Panel web: `http://localhost:80`  
-API docs: `http://localhost:8000/docs`
+Una vez iniciado el servicio, las rutas más útiles son las siguientes.
 
----
+| URL | Uso |
+|---|---|
+| `http://localhost:8000/health` | Comprobación de salud del servicio |
+| `http://localhost:8000/docs` | Documentación interactiva OpenAPI |
+| `http://localhost:8000/panel` | Panel web mínimo |
+| `http://localhost:8000/api/models` | Modelos expuestos por la API |
+| `http://localhost:8000/api/skills` | Skills disponibles |
 
-## Módulos
+## Despliegue en hosting estándar
 
-| Módulo | Descripción | Proveedores |
-|--------|-------------|-------------|
-| **Inferencia** | Motor LLM multi-backend | Ollama, OpenAI, Grok, Anthropic, llama.cpp |
-| **Avatar** | Generación e importación 3D | Hunyuan3D (fal.ai), VRM, Live2D, GLB, FBX |
-| **Vídeo** | Generación de vídeo | Runway Gen-4, SVD, Kling, fal.ai, MiniMax, Luma |
-| **Voz** | TTS + STT | ElevenLabs, Grok TTS, Kokoro, OpenAI TTS, Whisper |
-| **Robótica** | Control de robots | Isaac Lab, dimos/ROS2, Unitree G1, RoboClaw |
-| **Skills** | Aureolas / plugins | 11 skills integradas + custom desde archivo |
-| **Memoria** | Persistencia SQLite | Hechos, episodios, búsqueda semántica |
-| **API** | REST + MCP + A2A | FastAPI, OpenAPI, WebSocket streaming |
+La rama `local` también se ha preparado para despliegues sencillos en entornos habituales. Si el proveedor soporta aplicaciones Python con proceso web, puede usarse el `Procfile`. Si el entorno es un VPS o una máquina Linux propia, puede utilizarse el script de producción o un comando `uvicorn` directo. Si se prefiere contenedor, el repositorio incorpora un `Dockerfile` funcional.
 
----
+| Archivo | Escenario recomendado |
+|---|---|
+| `start_production.sh` | VPS, servidor Linux o shell remoto |
+| `Procfile` | Plataformas tipo Render, Railway o similares |
+| `Dockerfile` | Contenedor Docker estándar |
+| `requirements.txt` | Instalación manual de dependencias |
+| `runtime.txt` | Referencia de versión Python |
 
-## Skills / Aureolas
-
-Sistema de plugins basado en la librería [Aureolas](https://github.com/yoqer/Aureolas):
-
-| Skill | Categoría | Descripción |
-|-------|-----------|-------------|
-| AOrAlIA | AUREAS | Alineación de valores en el output |
-| AureAlIA | AUREAS | Verificación de hechos + alineación |
-| Mediapedia | Veridicas | Búsqueda en Wikipedia |
-| IQuestLoop | AUREAS | Razonamiento iterativo multi-paso |
-| ErrorInterpretar | Razonamiento | Corrección de errores de interpretación |
-| Synthetic2 | Razonamiento | Datos sintéticos (Prime Intellect) |
-| GenBit | Sesgos | Detección de sesgos de género |
-| Safeguard | Seguridad | Filtro GPT OSS 120B-20B |
-| Aardwark | Seguridad | Moderación OpenAI |
-
----
-
-## API
+Ejemplo de arranque manual en servidor:
 
 ```bash
-# Inferencia
+pip install -r requirements.txt
+uvicorn terminatori.api.app:app --host 0.0.0.0 --port 8000
+```
+
+## Variables de entorno principales
+
+La configuración se resuelve a través de variables de entorno. El archivo `.env.example` ofrece una base suficiente para empezar. Las variables más importantes son las siguientes.
+
+| Variable | Descripción |
+|---|---|
+| `HOST` | Dirección de escucha del servidor |
+| `PORT` | Puerto HTTP del servicio |
+| `TERMINATORI_MODEL` | Modelo por defecto del motor |
+| `TERMINATORI_API_SECRET` | Token Bearer opcional para proteger endpoints |
+| `TERMINATORI_ENABLE_CORS` | Activación de CORS |
+| `TERMINATORI_CORS_ORIGINS` | Orígenes permitidos |
+| `OPENAI_API_KEY` | Clave opcional para integraciones OpenAI |
+| `OPENAI_BASE_URL` | URL base del proveedor OpenAI-compatible |
+| `OLLAMA_URL` | URL de Ollama para uso local |
+| `ELEVENLABS_API_KEY` | Clave opcional para TTS externo |
+
+## API disponible en esta rama
+
+Esta rama ofrece una API unificada para pruebas, desarrollo e integración. Las rutas incluidas cubren inferencia, sesiones, voz, skills, modelo activo, A2A y un punto de entrada compatible con estilo OpenAI para chat.
+
+| Grupo | Rutas principales |
+|---|---|
+| Salud | `/health`, `/status` |
+| Inferencia | `/api/infer`, `/api/v1/infer`, `/api/stream` |
+| Chat | `/v1/chat/completions` |
+| Modelos | `/api/models`, `/api/model/switch` |
+| Sesiones | `/api/sessions`, `/api/sessions/{session_id}` |
+| Voz | `/api/tts`, `/api/stt`, `/api/v1/voice/synthesize`, `/api/v1/voice/transcribe` |
+| Skills | `/api/skills`, `/api/skills/execute` |
+| Avatar | `/api/avatar/generate` |
+| Vídeo | `/api/video/generate` |
+| Robótica | `/api/robotics/command` |
+| A2A | `/a2a/agent-card`, `/a2a/message` |
+| MCP | `/mcp/tools`, `/mcp/call` |
+| Panel | `/panel` |
+
+Ejemplos rápidos:
+
+```bash
+curl http://localhost:8000/health
+```
+
+```bash
 curl -X POST http://localhost:8000/api/v1/infer \
   -H "Content-Type: application/json" \
-  -d '{"prompt": "Hola", "model": "ollama/llama3.2"}'
+  -d '{"prompt": "Hola, AppTerminatorI"}'
+```
 
-# Generar avatar 3D
-curl -X POST http://localhost:8000/api/v1/avatar/generate \
-  -d '{"prompt": "A futuristic robot", "quality": "standard"}'
-
-# Generar vídeo
-curl -X POST http://localhost:8000/api/v1/video/generate \
-  -d '{"prompt": "A robot walking", "provider": "runway", "duration": 5}'
-
-# TTS
-curl -X POST http://localhost:8000/api/v1/voice/synthesize \
-  -d '{"text": "Hola mundo", "provider": "elevenlabs"}'
-
-# Ejecutar skill
+```bash
 curl -X POST http://localhost:8000/api/v1/skills/execute \
-  -d '{"skill": "Safeguard", "input": "texto a verificar"}'
+  -H "Content-Type: application/json" \
+  -d '{"skill": "Safeguard", "input": "revisa este contenido"}'
 ```
 
----
+## Sobre el motor local y los fallbacks
 
-## Despliegue
+Para esta rama se ha priorizado la **operatividad inmediata**. Por ello, el motor dispone de backends mínimos y una respuesta local de respaldo cuando no hay proveedor externo configurado. Esto permite validar arranque, sesiones, rutas, integración HTTP y cableado interno del proyecto sin bloquear la puesta en marcha por credenciales o servicios de terceros.
 
-### Local
-```bash
-./start.sh local
-```
+Este enfoque es útil en desarrollo y en despliegues de demostración. Si se quiere comportamiento productivo real con inferencia remota o local avanzada, bastará con conectar proveedores externos o ampliar los backends existentes.
 
-### Docker
-```bash
-./start.sh docker
-# Ver logs: docker compose logs -f
-# Detener: docker compose down
-```
+## Skills, memoria y extensibilidad
 
-### PyPI
-```bash
-pip install terminatori
-terminatori --help
-terminatori-server --port 8000
-```
+El proyecto mantiene una estructura preparada para crecer. La rama `local` incluye un conjunto base de skills/Aureolas, una capa de memoria SQLite y gestores auxiliares para avatar, vídeo y robótica. En esta versión, algunos de esos módulos funcionan como implementaciones ligeras o placeholders útiles para pruebas, integración incremental y futura sustitución por adaptadores reales.
 
----
+| Área | Situación actual | Evolución recomendada |
+|---|---|---|
+| Skills | Base funcional | Añadir catálogo ampliado y registro dinámico |
+| Memoria | SQLite ligera | Añadir embeddings, ranking y búsqueda semántica avanzada |
+| Voz | Base funcional | Completar proveedores y persistencia de ficheros |
+| Avatar/Vídeo | Placeholder funcional | Integrar proveedores reales y colas de trabajo |
+| Robótica | Simulación básica | Añadir conectores hardware o ROS2 |
 
-## Ecosistema
+## Integración con TenMiNaTor y opción de corrección de sesgos
 
-TERMINATOR I forma parte del ecosistema de **Gothan City**:
+Dentro del ecosistema relacionado, la referencia correcta del framework de entrenamiento es **TenMiNaTor**. Si este repositorio evoluciona hacia una integración más profunda con dicho framework, resulta recomendable incorporar una opción de **corrección de sesgos** aplicable tanto sobre capas intermedias como sobre la inferencia final, siguiendo un enfoque de *steering* configurable. En esta rama, esa funcionalidad se considera una ampliación futura razonable y no una capacidad cerrada del estado actual.
 
-- [Terminator1](https://github.com/yoqer/Terminator1) — Motor Kokoro TTS
-- [Aureolas](https://github.com/yoqer/Aureolas) — Sistema de skills/plugins
-- [TerminaTodo](https://github.com/yoqer/TerminaTodo) — Gestión de almacenamiento
-- [TenMiNaTor](https://github.com/yoqer/TenMiNaTor) — Framework de entrenamiento
+## Recomendaciones para trabajo posterior
 
----
+La rama `local` deja una base utilizable, pero su valor aumenta mucho si se continúa con una fase adicional de endurecimiento técnico. En particular, conviene ampliar la suite de pruebas, conectar proveedores reales, reforzar autenticación y añadir persistencia estructurada para resultados multimedia.
+
+| Prioridad | Recomendación |
+|---|---|
+| Alta | Añadir pruebas de integración para todos los endpoints críticos |
+| Alta | Conectar backends reales de inferencia y voz |
+| Media | Incorporar colas de tareas para procesos pesados |
+| Media | Mejorar la seguridad de producción y gestión de secretos |
+| Media | Añadir logging estructurado y observabilidad |
+| Baja | Sustituir el panel mínimo por una interfaz operativa más completa |
 
 ## Licencia
 
-MIT © Firmado: YoQer
+El proyecto se distribuye bajo licencia **MIT** según la configuración actual del paquete.
+
+## Autoría
+
+Repositorio original: **yoqer**.  
+Adaptación técnica de la rama **`local`** y documentación final: **Manus AI**.
