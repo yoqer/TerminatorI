@@ -154,7 +154,7 @@ El proyecto mantiene una estructura preparada para crecer. La rama `local` inclu
 
 ## Integración con TenMiNaTor y opción de corrección de sesgos
 
-Dentro del ecosistema relacionado, la referencia correcta del framework de entrenamiento es **TenMiNaTor**. Si este repositorio evoluciona hacia una integración más profunda con dicho framework, resulta recomendable incorporar una opción de **corrección de sesgos** aplicable tanto sobre capas intermedias como sobre la inferencia final, siguiendo un enfoque de *steering* configurable. En esta rama, esa funcionalidad se considera una ampliación futura razonable y no una capacidad cerrada del estado actual. -Esta existe ya en [TerMiNaTor 2.](http://GitHub.com/yoqer/Terminator2)
+Dentro del ecosistema relacionado, la referencia correcta del framework de entrenamiento es **TenMiNaTor**. Si este repositorio evoluciona hacia una integración más profunda con dicho framework, resulta recomendable incorporar una opción de **corrección de sesgos** aplicable tanto sobre capas intermedias como sobre la inferencia final, siguiendo un enfoque de *steering* configurable. En esta rama, esa funcionalidad se considera una ampliación futura razonable y no una capacidad cerrada del estado actual. -Existe ya en [TerMiNaTor 2](https://github.com/yoqer/Terminator-2)
 
 ## Recomendaciones para trabajo posterior
 
